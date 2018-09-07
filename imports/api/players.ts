@@ -12,16 +12,19 @@ export interface Player {
 
 export const Players = new Mongo.Collection<Player>('players')
 
-Meteor.methods({
-  'players.newPlayer': () => {
-    const newPlayer: Player = {
-      _id: generateID(),
-      hand: newHand(),
-      tokens: 2,
+// only want meteor methods defined if in server
+if (Meteor.isServer) {
+  Meteor.methods({
+    'players.newPlayer': () => {
+      const newPlayer: Player = {
+        _id: generateID(),
+        hand: newHand(),
+        tokens: 2,
+      }
+
+      Players.insert(newPlayer)
+
+      return newPlayer
     }
-
-    Players.insert(newPlayer)
-
-    return newPlayer
-  }
-})
+  })
+}

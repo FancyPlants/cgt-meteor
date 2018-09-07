@@ -3,6 +3,7 @@ import {
   Paper,
   Button,
   Grid,
+  Grow,
   Typography,
   WithStyles,
   withStyles,
@@ -26,38 +27,40 @@ class LobbyItem extends React.Component<LobbyItemProps, {}> {
     } = this.props
 
     return (
-      <Paper className={classes.container}>
-        <Grid
-          alignContent="center"
-          container={true}>
+      <Grow in={true}>
+        <Paper className={classes.container}>
           <Grid
-            item={true}
-            md={7}>
-            <Typography variant="display2">{name}</Typography>
-          </Grid>
+            alignContent="center"
+            container={true}>
+            <Grid
+              item={true}
+              md={7}>
+              <Typography variant="display2">{name}</Typography>
+            </Grid>
 
-          <Grid
-            item={true}
-            md={1}
-            />
+            <Grid
+              item={true}
+              md={1}
+              />
 
-          <Grid
-            item={true}
-            md={2}>
-            <Typography variant="display2">{currentPlayers}/{maxPlayers}</Typography>
-          </Grid>
+            <Grid
+              item={true}
+              md={2}>
+              <Typography variant="display2">{currentPlayers}/{maxPlayers}</Typography>
+            </Grid>
 
-          <Grid
-            item={true}
-            md={1}>
-            <Button
-              className={classes.button}
-              variant="contained">
-              Join
-            </Button>
+            <Grid
+              item={true}
+              md={1}>
+              <Button
+                className={classes.button}
+                variant="contained">
+                Join
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      </Grow>
     )
   }
 }

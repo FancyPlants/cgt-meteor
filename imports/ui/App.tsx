@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import { WithStyles, withStyles } from '@material-ui/core'
 import styles from './AppStyles'
+import Landing from './components/Landing/Landing'
 import Home from './components/Home/Home'
 // import Lobby from './components/Lobby'
 // import Game from './components/Game'
@@ -18,7 +19,8 @@ class App extends React.Component<AppProps, {}> {
       <div className={classes.container}>
         <BrowserRouter>
           <Switch>
-            <Route exact path='/' component={Home} />
+            <Route exact app='/' component={Landing} />
+            <Route exact path='/app' component={Home} />
             {/* <Route path='/lobby/:name' component={Lobby} />
             <Route path='/game/:name' component={Game} /> */}
           </Switch>
