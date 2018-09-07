@@ -1,0 +1,34 @@
+{
+  "name": "cgt-meteor",
+  "private": true,
+  "scripts": {
+    "start": "meteor run",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
+  },
+  "dependencies": {
+    "@babel/runtime": "7.0.0-beta.55",
+    "@material-ui/core": "^3.0.2",
+    "@types/lodash": "^4.14.116",
+    "@types/meteor": "^1.4.20",
+    "@types/nanoid": "^1.2.0",
+    "@types/node": "^10.9.4",
+    "@types/react": "^16.4.13",
+    "@types/react-dom": "^16.0.7",
+    "@types/react-router-dom": "^4.3.0",
+    "lodash": "^4.17.10",
+    "meteor-node-stubs": "^0.4.1",
+    "nanoid": "^1.2.3",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-router-dom": "^4.3.1"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.tsx",
+      "server": "server/main.ts"
+    },
+    "testModule": "tests/main.js"
+  }
+}
