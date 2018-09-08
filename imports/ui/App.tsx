@@ -8,7 +8,7 @@ import Home from './components/Home/Home'
 // import Lobby from './components/Lobby'
 // import Game from './components/Game'
 
-interface AppProps extends WithStyles<typeof styles>{}
+interface AppProps extends WithStyles<typeof styles> {}
 
 class App extends React.Component<AppProps, {}> {
 
@@ -19,8 +19,8 @@ class App extends React.Component<AppProps, {}> {
       <div className={classes.container}>
         <BrowserRouter>
           <Switch>
-            <Route exact app='/' component={Landing} />
-            <Route exact path='/app' component={Home} />
+            <Route exact path='/' component={Landing} />
+            <Route exact path='/home' component={Home} />
             {/* <Route path='/lobby/:name' component={Lobby} />
             <Route path='/game/:name' component={Game} /> */}
           </Switch>

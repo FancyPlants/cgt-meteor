@@ -15,7 +15,7 @@ export const Players = new Mongo.Collection<Player>('players')
 // only want meteor methods defined if in server
 if (Meteor.isServer) {
   Meteor.methods({
-    'players.newPlayer': () => {
+    'players.newPlayer'() {
       const newPlayer: Player = {
         _id: generateID(),
         hand: newHand(),
@@ -25,6 +25,6 @@ if (Meteor.isServer) {
       Players.insert(newPlayer)
 
       return newPlayer
-    }
+    },
   })
 }

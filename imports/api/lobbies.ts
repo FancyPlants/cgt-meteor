@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
+import { check } from 'meteor/check'
 
 import { generateID } from '../logic/utilities'
 import { Player } from './players'
@@ -20,17 +21,18 @@ if (Meteor.isServer) {
     'lobbies',
     function lobbies() {
       return Lobbies.find({})
-    }
+    },
   )
 
   Meteor.methods({
     'lobbies.newLobby'(name: string) {
+      check(name, String)
       const currentLobbies = Lobbies.find({ name }).fetch()
-  
+
       if (currentLobbies.length > 0) {
         throw new Meteor.Error('Lobby with the same name already exists!')
       }
-  
+
       Lobbies.insert({
         _id: generateID(),
         name,

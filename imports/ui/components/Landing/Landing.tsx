@@ -1,4 +1,7 @@
 import * as React from 'react'
+import { Meteor } from 'meteor/meteor'
+import { Accounts } from 'meteor/accounts-base'
+import { History } from 'history'
 import {
   Paper,
   WithStyles,
@@ -8,6 +11,7 @@ import {
   Button,
 } from '@material-ui/core'
 
+import { errorAlert } from '../../../logic/utilities'
 import styles from './LandingStyles'
 
 enum ScreenState {
@@ -24,7 +28,9 @@ interface LandingState {
   signupPassword: string,
 }
 
-interface LandingProps extends WithStyles<typeof styles> {}
+interface LandingProps extends WithStyles<typeof styles> {
+  history: History,
+}
 
 class Landing extends React.Component<LandingProps, LandingState> {
   state = {
@@ -45,6 +51,48 @@ class Landing extends React.Component<LandingProps, LandingState> {
     this.setState({ [field]: e.target.value } as LandingState)
   }
 
+  //#region login
+  loginWithPassword = () => {
+    const { loginEmail, loginPassword } = this.state
+    const { history } = this.props
+
+    Meteor.loginWithPassword(loginEmail, loginPassword, (err: Meteor.Error) => {
+      if (err) {
+        errorAlert('Unable to sign up', err.toString())
+      } else {
+        history.push('/home')
+      }
+    })
+  }
+  //#endregion
+
+  //#region signup
+  signupWithPassword = () => {
+    const {
+      signupConfirmPassword,
+      signupEmail,
+      signupPassword,
+    } = this.state
+    const { history } = this.props
+
+    if (signupConfirmPassword !== signupPassword) {
+      errorAlert('Unable to sign up', 'Passwords do not match.')
+      return
+    }
+
+    Accounts.createUser({
+      email: signupEmail,
+      password: signupPassword,
+    }, (err: Meteor.Error) => {
+      if (err) {
+        errorAlert('Unable to sign up', err.toString())
+      } else {
+        history.push('/home')
+      }
+    })
+  }
+  //#endregion
+
   render() {
     const { classes } = this.props
     const {
@@ -56,7 +104,13 @@ class Landing extends React.Component<LandingProps, LandingState> {
       signupEmail,
       signupPassword,
     } = this.state
-    const { handleChange, switchScreen } = this
+
+    const {
+      loginWithPassword,
+      handleChange,
+      signupWithPassword,
+      switchScreen,
+    } = this
 
     return (
       <Paper className={classes.container}>
@@ -80,7 +134,11 @@ class Landing extends React.Component<LandingProps, LandingState> {
               type="password"
               value={loginPassword}
               />
-            <Button variant="contained">Login</Button>
+            <Button
+              onClick={loginWithPassword}
+              variant="contained">
+              Login
+            </Button>
             <Typography>Need an account?</Typography>
             <Button onClick={switchScreen(ScreenState.Signup)}>Sign Up</Button>
           </React.Fragment>
@@ -108,7 +166,11 @@ class Landing extends React.Component<LandingProps, LandingState> {
               type="password"
               value={signupConfirmPassword}
               />
-            <Button variant="contained">Sign up</Button>
+            <Button
+              onClick={signupWithPassword}
+              variant="contained">
+              Sign up
+            </Button>
             <Typography>Have an account?</Typography>
             <Button onClick={switchScreen(ScreenState.Login)}>Login</Button>
           </React.Fragment>

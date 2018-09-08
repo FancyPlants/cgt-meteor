@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Meteor } from 'meteor/meteor'
-import to from 'await-to-ts'
 import swal from 'sweetalert2'
 import {
   Typography,
@@ -15,9 +14,7 @@ import {
 import LobbyList from './components/LobbyList/LobbyList'
 import styles from './HomeStyles'
 
-interface HomeProps extends WithStyles<typeof styles> {
-
-}
+interface HomeProps extends WithStyles<typeof styles> {}
 
 class Home extends React.Component<HomeProps, {}> {
   state = {
@@ -35,7 +32,7 @@ class Home extends React.Component<HomeProps, {}> {
       return
     }
 
-    Meteor.call('lobbies.newLobby', room, err => {
+    Meteor.call('lobbies.newLobby', room, (err: Meteor.Error) => {
       if (err) {
         swal({
           title: 'Unable to create lobby',

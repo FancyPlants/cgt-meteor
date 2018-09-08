@@ -14,8 +14,7 @@
     },
     "include": [
       "client/**/*",
-      "server/**/*",
-      "imports/**/*"
+      "server/**/*"
     ],
     "exclude": [
       "node_modules",

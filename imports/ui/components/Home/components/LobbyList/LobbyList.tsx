@@ -1,43 +1,45 @@
 import * as React from 'react'
-// even though this is real...
-import { withTracker } from 'meteor/react-meteor-data'
+import { Meteor } from 'meteor/meteor'
+import { Tracker } from 'meteor/tracker'
 
 import { Lobbies, Lobby } from '../../../../../api/lobbies'
 import LobbyItem from './components/LobbyItem/LobbyItem'
 
-// const lobbies = [
-//   {
-//     name: 'Name',
-//     currentPlayers: 5,
-//     maxPlayers: 10,
-//   },
-//   {
-//     name: 'Muuuuuuuuch longer name',
-//     currentPlayers: 0,
-//     maxPlayers: 10,
-//   },
-// ]
-
-interface LobbyListProps {
-  lobbies: Lobby[],
+interface LobbyListState {
+  lobbies: Lobby[]
 }
 
-const LobbyList: React.SFC<LobbyListProps> = ({ lobbies }) => (
-  <div>
-    {lobbies.map(lobby =>
-      <LobbyItem
-        currentPlayers={lobby.currentPlayers.length}
-        key={lobby._id}
-        maxPlayers={lobby.maxPlayers}
-        name={lobby.name}/>
-    )}
-  </div>
-)
+class LobbyList extends React.Component<{}, LobbyListState> {
+  subscription: Meteor.SubscriptionHandle
+  tracker: Tracker.Computation
 
-export default withTracker((props: LobbyListProps) => {
-  Meteor.subscribe('lobbies')
-
-  return {
-    lobbies: Lobbies.find().fetch()
+  componentWillMount() {
+    this.subscription = Meteor.subscribe('lobbies')
+    this.tracker = Tracker.autorun(() => {
+      this.setState({ lobbies: Lobbies.find().fetch() })
+    })
   }
-})(LobbyList)
+
+  componentWillUnmount() {
+    this.subscription.stop()
+    this.tracker.stop()
+  }
+
+  render() {
+    const { lobbies } = this.state
+    return (
+      <div>
+        {lobbies.map(lobby =>
+          <LobbyItem
+            currentPlayers={lobby.currentPlayers.length}
+            key={lobby._id}
+            maxPlayers={lobby.maxPlayers}
+            name={lobby.name}
+            />,
+        )}
+      </div>
+    )
+  }
+}
+
+export default LobbyList
