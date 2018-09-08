@@ -5,7 +5,7 @@ import { WithStyles, withStyles } from '@material-ui/core'
 import styles from './AppStyles'
 import Landing from './scenes/Landing/Landing'
 import Home from './scenes/Home/Home'
-// import Lobby from './components/Lobby'
+import LobbyScreen from './scenes/LobbyScreen/LobbyScreen'
 // import Game from './components/Game'
 
 interface AppProps extends WithStyles<typeof styles> {}
@@ -21,8 +21,8 @@ class App extends React.Component<AppProps, {}> {
           <Switch>
             <Route exact path='/' component={Landing} />
             <Route exact path='/home' component={Home} />
-            {/* <Route path='/lobby/:name' component={Lobby} />
-            <Route path='/game/:name' component={Game} /> */}
+            <Route path='/lobby/:name' component={LobbyScreen} />
+            {/* <Route path='/game/:name' component={Game} /> */}
           </Switch>
         </BrowserRouter>
       </div>

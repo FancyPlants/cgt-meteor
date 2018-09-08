@@ -21,5 +21,4 @@ export const newHand = () => [
   cards[random(0, cards.length - 1)],
 ]
 
-
 export default Card

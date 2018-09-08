@@ -21,10 +21,10 @@ enum ScreenState {
 
 interface LandingState {
   currentScreen: ScreenState,
-  loginEmail: string,
+  loginUsername: string,
   loginPassword: string,
   signupConfirmPassword: string,
-  signupEmail: string,
+  signupUsername: string,
   signupPassword: string,
 }
 
@@ -35,11 +35,11 @@ interface LandingProps extends WithStyles<typeof styles> {
 class Landing extends React.Component<LandingProps, LandingState> {
   state = {
     currentScreen: ScreenState.Login,
-    loginEmail: '',
+    loginUsername: '',
     loginPassword: '',
 
     signupConfirmPassword: '',
-    signupEmail: '',
+    signupUsername: '',
     signupPassword: '',
   }
 
@@ -53,10 +53,10 @@ class Landing extends React.Component<LandingProps, LandingState> {
 
   //#region login
   loginWithPassword = () => {
-    const { loginEmail, loginPassword } = this.state
+    const { loginUsername, loginPassword } = this.state
     const { history } = this.props
 
-    Meteor.loginWithPassword(loginEmail, loginPassword, (err: Meteor.Error) => {
+    Meteor.loginWithPassword(loginUsername, loginPassword, (err: Meteor.Error) => {
       if (err) {
         errorAlert('Unable to sign up', err.toString())
       } else {
@@ -70,7 +70,7 @@ class Landing extends React.Component<LandingProps, LandingState> {
   signupWithPassword = () => {
     const {
       signupConfirmPassword,
-      signupEmail,
+      signupUsername,
       signupPassword,
     } = this.state
     const { history } = this.props
@@ -81,7 +81,7 @@ class Landing extends React.Component<LandingProps, LandingState> {
     }
 
     Accounts.createUser({
-      email: signupEmail,
+      username: signupUsername,
       password: signupPassword,
     }, (err: Meteor.Error) => {
       if (err) {
@@ -97,11 +97,11 @@ class Landing extends React.Component<LandingProps, LandingState> {
     const { classes } = this.props
     const {
       currentScreen,
-      loginEmail,
+      loginUsername,
       loginPassword,
 
       signupConfirmPassword,
-      signupEmail,
+      signupUsername,
       signupPassword,
     } = this.state
 
@@ -123,9 +123,9 @@ class Landing extends React.Component<LandingProps, LandingState> {
             </Typography>
             <TextField
               fullWidth={true}
-              label="Email"
-              onChange={handleChange('loginEmail')}
-              value={loginEmail}
+              label="Username"
+              onChange={handleChange('loginUsername')}
+              value={loginUsername}
               />
              <TextField
               fullWidth={true}
@@ -148,9 +148,9 @@ class Landing extends React.Component<LandingProps, LandingState> {
             <Typography variant="display1">Sign Up</Typography>
             <TextField
               fullWidth={true}
-              label="Email"
-              onChange={handleChange('signupEmail')}
-              value={signupEmail}
+              label="Username"
+              onChange={handleChange('signupUsername')}
+              value={signupUsername}
               />
              <TextField
               fullWidth={true}

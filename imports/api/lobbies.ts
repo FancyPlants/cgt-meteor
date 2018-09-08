@@ -24,6 +24,13 @@ if (Meteor.isServer) {
     },
   )
 
+  Meteor.publish(
+    'currentLobby',
+    function lobbyPlayers(lobbyId: string) {
+      return Lobbies.findOne({ _id: lobbyId })
+    },
+  )
+
   Meteor.methods({
     'lobbies.newLobby'(name: string) {
       check(name, String)
