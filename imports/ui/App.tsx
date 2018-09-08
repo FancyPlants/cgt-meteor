@@ -3,8 +3,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import { WithStyles, withStyles } from '@material-ui/core'
 import styles from './AppStyles'
-import Landing from './components/Landing/Landing'
-import Home from './components/Home/Home'
+import Landing from './scenes/Landing/Landing'
+import Home from './scenes/Home/Home'
 // import Lobby from './components/Lobby'
 // import Game from './components/Game'
 
