@@ -43,6 +43,14 @@ class Landing extends React.Component<LandingProps, LandingState> {
     signupPassword: '',
   }
 
+  componentWillMount() {
+    // they don't need to login if they already logged in
+    const { history } = this.props
+    if (Meteor.userId()) {
+      history.push('/home')
+    }
+  }
+
   switchScreen = (state: ScreenState) => () => {
     this.setState({ currentScreen: state })
   }

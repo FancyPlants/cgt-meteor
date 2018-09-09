@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Meteor } from 'meteor/meteor'
 import swal from 'sweetalert2'
+import { History } from 'history'
+import { Lobbies } from '../../../api/lobbies'
 import {
   Typography,
   TextField,
@@ -14,11 +16,22 @@ import {
 import LobbyList from './components/LobbyList/LobbyList'
 import styles from './HomeStyles'
 
-interface HomeProps extends WithStyles<typeof styles> {}
+interface HomeProps extends WithStyles<typeof styles> {
+  history: History,
+}
 
 class Home extends React.Component<HomeProps, {}> {
   state = {
     room: '',
+  }
+
+  componentWillMount() {
+    const { history } = this.props
+    const lobby = Lobbies.findOne({ currentPlayers: Meteor.userId() })
+    console.log(lobby)
+    if (lobby) {
+      history.push(`/lobby/${lobby.name}`)
+    }
   }
 
   handleChange = (e: any) => {

@@ -8,7 +8,7 @@ import {
   Grid,
 } from '@material-ui/core'
 
-import { User } from '../../../api/users'
+import { User } from '../../../../../api/users'
 
 interface LobbyPlayerListProps {
   users: User[],

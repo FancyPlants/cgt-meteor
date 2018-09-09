@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Meteor } from 'meteor/meteor'
+// import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 
 import { Lobbies, Lobby } from '../../../../../api/lobbies'
@@ -10,18 +10,15 @@ interface LobbyListState {
 }
 
 class LobbyList extends React.Component<{}, LobbyListState> {
-  subscription: Meteor.SubscriptionHandle
   tracker: Tracker.Computation
 
   componentWillMount() {
-    this.subscription = Meteor.subscribe('lobbies')
     this.tracker = Tracker.autorun(() => {
       this.setState({ lobbies: Lobbies.find().fetch() })
     })
   }
 
   componentWillUnmount() {
-    this.subscription.stop()
     this.tracker.stop()
   }
 

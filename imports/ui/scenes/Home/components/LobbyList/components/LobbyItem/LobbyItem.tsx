@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Meteor } from 'meteor/meteor'
 import {
   Paper,
   Button,
@@ -8,8 +9,14 @@ import {
   WithStyles,
   withStyles,
 } from '@material-ui/core'
+import { Redirect } from 'react-router-dom'
 
+import { errorAlert } from '../../../../../../../logic/utilities'
 import styles from './LobbyItemStyles'
+
+interface LobbyItemState {
+  lobbyRedirect: boolean,
+}
 
 interface LobbyItemProps extends WithStyles<typeof styles> {
   currentPlayers: number,
@@ -17,14 +24,39 @@ interface LobbyItemProps extends WithStyles<typeof styles> {
   name: string,
 }
 
-class LobbyItem extends React.Component<LobbyItemProps, {}> {
+class LobbyItem extends React.Component<LobbyItemProps, LobbyItemState> {
+  state = {
+    lobbyRedirect: false,
+  }
+
+  joinGame = () => {
+    const { name } = this.props
+    Meteor.call('lobbies.joinLobby', name, (err: Meteor.Error) => {
+      if (err) {
+        errorAlert('Unable to join lobby', err.toString())
+      } else {
+        this.setState({ lobbyRedirect: true })
+      }
+    })
+  }
+
   render() {
     const {
-      classes,
-      currentPlayers,
-      maxPlayers,
-      name,
-    } = this.props
+      joinGame,
+      props: {
+        classes,
+        currentPlayers,
+        maxPlayers,
+        name,
+      },
+      state: {
+        lobbyRedirect,
+      },
+    } = this
+
+    if (lobbyRedirect) {
+      return <Redirect to={`/lobby/${name}`} />
+    }
 
     return (
       <Grow in={true}>
@@ -54,6 +86,7 @@ class LobbyItem extends React.Component<LobbyItemProps, {}> {
               md={1}>
               <Button
                 className={classes.button}
+                onClick={joinGame}
                 variant="contained">
                 Join
               </Button>
