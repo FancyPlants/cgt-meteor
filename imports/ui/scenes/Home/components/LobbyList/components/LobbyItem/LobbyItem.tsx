@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
 
-import { errorAlert } from '../../../../../../../logic/utilities'
+import { errorAlert } from '../../../../../../utilities'
 import styles from './LobbyItemStyles'
 
 interface LobbyItemState {

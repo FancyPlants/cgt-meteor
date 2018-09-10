@@ -15,8 +15,8 @@ const CGT = () => (
 
 Meteor.startup(() => {
   // For now, subscribe to everything
-  Meteor.subscribe('users')
-  Meteor.subscribe('lobbies')
+  const userSubscription = Meteor.subscribe('users')
+  const lobbySubscription = Meteor.subscribe('lobbies')
 
   ReactDOM.render(<CGT />, document.getElementById('root'))
 })

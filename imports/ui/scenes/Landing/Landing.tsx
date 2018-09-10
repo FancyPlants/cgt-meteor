@@ -11,7 +11,7 @@ import {
   Button,
 } from '@material-ui/core'
 
-import { errorAlert } from '../../../logic/utilities'
+import { errorAlert } from '../../utilities'
 import styles from './LandingStyles'
 
 enum ScreenState {

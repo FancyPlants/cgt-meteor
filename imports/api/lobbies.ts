@@ -3,12 +3,13 @@ import { Mongo } from 'meteor/mongo'
 import { check } from 'meteor/check'
 import includes from 'lodash/includes'
 
-import { generateID } from '../logic/utilities'
+import { generateID } from '../ui/utilities'
 import { User } from './users'
 
 export interface Lobby {
   _id: string,
   name: string,
+  isStarting: boolean,
 
   // player IDs
   currentPlayers: string[],
@@ -37,15 +38,16 @@ if (Meteor.isServer) {
   Meteor.methods({
     'lobbies.newLobby'(name: string) {
       check(name, String)
-      const currentLobbies = Lobbies.find({ name }).fetch()
+      const currentLobbies = Lobbies.find({ name }).count()
 
-      if (currentLobbies.length > 0) {
+      if (currentLobbies > 0) {
         throw new Meteor.Error('Lobby with the same name already exists!')
       }
 
       Lobbies.insert({
         _id: generateID(),
         name,
+        isStarting: false,
         currentPlayers: [],
         maxPlayers: 10,
       })
@@ -70,6 +72,57 @@ if (Meteor.isServer) {
       }
 
       Lobbies.update({ _id: lobby._id }, { $push: { currentPlayers: Meteor.userId() }})
+    },
+
+    'lobbies.leaveLobby'() {
+      const userId = Meteor.userId()
+
+      const lobby = Lobbies.findOne({ currentPlayers: userId })
+
+      if (!lobby || !includes(lobby.currentPlayers, userId)) {
+        throw new Meteor.Error('Unable to leave this lobby')
+      }
+
+      // delete lobby if nobody is there
+      if (lobby.currentPlayers.length <= 1) {
+        Lobbies.remove({ _id: lobby._id })
+      } else {
+        Lobbies.update({ _id: lobby._id }, { $pull: { currentPlayers: userId } })
+      }
+    },
+
+    'lobbies.kickPlayer'(userId: string) {
+      check(userId, String)
+      const lobby = Lobbies.findOne({ currentPlayers: this.userId })
+
+      if (!lobby || !includes(lobby.currentPlayers, this.userId)) {
+        throw new Meteor.Error('Unable to kick player')
+      }
+
+      const host = Meteor.users.findOne({ _id: lobby.currentPlayers[0] })
+
+      if (this.userId !== host._id) {
+        throw new Meteor.Error('You are not the host of this game, cannot kick')
+      }
+
+      Lobbies.update({ _id: lobby._id }, { $pull: { currentPlayers: userId } })
+    },
+
+    'lobbies.startGame'() {
+      const lobby = Lobbies.findOne({ currentPlayers: this.userId })
+
+      if (!lobby) {
+        throw new Meteor.Error('Wtf are you trying to do rn')
+      }
+
+      const host = Meteor.users.findOne({ _id: lobby.currentPlayers[0] })
+
+      if (this.userId !== host._id) {
+        throw new Meteor.Error('You are not the host, unable to start game.')
+      }
+
+      Lobbies.update({ _id: lobby._id }, { $set: { isStarting: true } })
+      // TODO: create a game
     },
   })
 }

@@ -1,27 +1,27 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "lib": [ "es2015", "dom" ],
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "alwaysStrict": true,
-      "sourceMap": true,
-      "jsx": "react",
-      "allowJs": false,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "esModuleInterop": true
-    },
-    "include": [
-      "client/**/*",
-      "server/**/*"
-    ],
-    "exclude": [
-      "node_modules",
-      ".meteor"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "*": ["*"]
-    }  
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [ "es2015", "dom" ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "allowJs": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "client/**/*",
+    "server/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".meteor"
+  ],
+  "baseUrl": ".",
+  "paths": {
+    "*": ["*"]
+  }  
 }

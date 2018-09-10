@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
+import { Redirect } from 'react-router-dom'
 import {
   Typography,
   Button,
-  Paper,
-  Grid,
-  withStyles,
   WithStyles,
+  withStyles,
+  colors,
+  Grid,
 } from '@material-ui/core'
 
 import { Lobbies, Lobby } from '../../../api/lobbies'
@@ -19,19 +20,19 @@ interface LobbyScreenState {
   users: User[],
 }
 
-class LobbyScreen extends React.Component<{}, LobbyScreenState> {
+interface LobbyScreenProps extends WithStyles<typeof styles> {}
+
+class LobbyScreen extends React.Component<LobbyScreenProps, LobbyScreenState> {
   tracker: Tracker.Computation
 
   componentWillMount() {
+    window.addEventListener('beforeunload', this.removePlayerFromLobby)
     this.tracker = Tracker.autorun(() => {
       // after this, should only be subscribed to one lobby,
       // so this should return the current lobby
       const lobby = Lobbies.findOne({ currentPlayers: Meteor.userId() })
-      const users: User[] = []
-
-      for (const userId of lobby.currentPlayers) {
-        users.push(Meteor.users.findOne({ _id: userId }) as User)
-      }
+      const users: User[] = Meteor.users
+        .find({ _id: { $in: lobby.currentPlayers } }).fetch() as User[]
 
       this.setState({ lobby, users })
     })
@@ -39,18 +40,57 @@ class LobbyScreen extends React.Component<{}, LobbyScreenState> {
 
   componentWillUnmount() {
     this.tracker.stop()
+    this.removePlayerFromLobby()
+  }
+
+  removePlayerFromLobby() {
+    Meteor.call('lobbies.leaveLobby')
+    window.removeEventListener('beforeunload', this.removePlayerFromLobby)
   }
 
   render() {
-    const { lobby, users } = this.state
+    const {
+      props: {
+        classes,
+      },
+      state: {
+        lobby,
+        users,
+      },
+    } = this
 
     if (!lobby || !users) {
       return <Typography>Loading...</Typography>
     }
 
+    if (lobby.isStarting) {
+      return <Redirect to={`/game/${lobby.name}`} />
+    }
+
+    const currentUserId = Meteor.userId()
+    const isHost = currentUserId === lobby.currentPlayers[0]
+
     return (
       <React.Fragment>
-        <Typography variant="display2">{lobby.name}</Typography>
+        <Grid container={true}>
+          <Grid
+            item={true}
+            md={9}>
+            <Typography variant="display2">{lobby.name}</Typography>
+          </Grid>
+
+          <Grid
+            item={true}
+            md={2}>
+            <Button
+              className={classes.startButton}
+              disabled={!isHost}
+              variant="contained">
+              Start Game
+            </Button>
+          </Grid>
+        </Grid>
+
         <hr />
         <LobbyPlayerList users={users}/>
       </React.Fragment>
@@ -58,4 +98,15 @@ class LobbyScreen extends React.Component<{}, LobbyScreenState> {
   }
 }
 
-export default LobbyScreen
+const styles = {
+  startButton: {
+    backgroundColor: colors.green[600],
+    color: 'white',
+
+    '&:hover': {
+      backgroundColor: colors.green[800],
+    },
+  },
+}
+
+export default withStyles(styles)(LobbyScreen)
