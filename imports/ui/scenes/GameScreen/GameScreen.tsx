@@ -6,6 +6,8 @@ import {
   Grid,
 } from '@material-ui/core'
 
+import ThisPlayer from './components/ThisPlayer/ThisPlayer'
+
 interface GameScreenProps extends WithStyles<typeof styles> {}
 
 class GameScreen extends React.Component<GameScreenProps, {}> {
@@ -20,6 +22,7 @@ class GameScreen extends React.Component<GameScreenProps, {}> {
       <React.Fragment>
         <Typography variant="display2">Game Name</Typography>
         <hr />
+        <ThisPlayer />
       </React.Fragment>
     )
   }

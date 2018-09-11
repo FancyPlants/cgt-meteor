@@ -2,17 +2,20 @@ import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
 import { check } from 'meteor/check'
 import includes from 'lodash/includes'
+import random from 'lodash/random'
 
-import { generateID } from '../ui/utilities'
+import { generateID, MongoID } from '../ui/utilities'
+import { GameState } from '../logic/game'
 import { User } from './users'
+import { Games } from './games'
+import { newHand } from '../logic/card'
 
 export interface Lobby {
-  _id: string,
+  _id: MongoID,
   name: string,
   isStarting: boolean,
 
-  // player IDs
-  currentPlayers: string[],
+  currentPlayers: MongoID[],
   maxPlayers: number,
 }
 
@@ -121,8 +124,28 @@ if (Meteor.isServer) {
         throw new Meteor.Error('You are not the host, unable to start game.')
       }
 
-      Lobbies.update({ _id: lobby._id }, { $set: { isStarting: true } })
-      // TODO: create a game
+      // insert the game and prepare it for the users before redirecting them
+      Games.insert({
+        _id: generateID(),
+
+        // generate playerdata template for each person
+        currentPlayers: lobby.currentPlayers.map(userId => ({
+          hand: newHand(),
+          tokens: 2,
+          userId,
+        })),
+
+        // randomly chooses a player to start the game
+        currentTurn: lobby.currentPlayers[random(0, lobby.currentPlayers.length - 1)],
+        name: lobby.name,
+
+        // game starts with player able to make decision
+        state: GameState.TURN_START,
+      }, () => {
+        // this update causes a redirect for all players, but only to be done
+        // after the game is successfully inserted
+        Lobbies.update({ _id: lobby._id }, { $set: { isStarting: true } })
+      })
     },
   })
 }

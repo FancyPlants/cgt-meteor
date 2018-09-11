@@ -17,6 +17,7 @@ Meteor.startup(() => {
   // For now, subscribe to everything
   const userSubscription = Meteor.subscribe('users')
   const lobbySubscription = Meteor.subscribe('lobbies')
+  const gameSubscription = Meteor.subscribe('currentGame')
 
   ReactDOM.render(<CGT />, document.getElementById('root'))
 })

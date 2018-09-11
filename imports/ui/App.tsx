@@ -6,7 +6,7 @@ import styles from './AppStyles'
 import Landing from './scenes/Landing/Landing'
 import Home from './scenes/Home/Home'
 import LobbyScreen from './scenes/LobbyScreen/LobbyScreen'
-// import Game from './components/Game'
+import GameScreen from './scenes/GameScreen/GameScreen'
 
 interface AppProps extends WithStyles<typeof styles> {}
 
@@ -22,7 +22,7 @@ class App extends React.Component<AppProps, {}> {
             <Route exact path='/' component={Landing} />
             <Route exact path='/home' component={Home} />
             <Route path='/lobby/:name' component={LobbyScreen} />
-            {/* <Route path='/game/:name' component={Game} /> */}
+            <Route path='/game/:name' component={GameScreen} />
           </Switch>
         </BrowserRouter>
       </div>

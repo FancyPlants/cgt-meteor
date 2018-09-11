@@ -31,6 +31,9 @@ class LobbyScreen extends React.Component<LobbyScreenProps, LobbyScreenState> {
       // after this, should only be subscribed to one lobby,
       // so this should return the current lobby
       const lobby = Lobbies.findOne({ currentPlayers: Meteor.userId() })
+      if (!lobby) {
+        return
+      }
       const users: User[] = Meteor.users
         .find({ _id: { $in: lobby.currentPlayers } }).fetch() as User[]
 
@@ -43,13 +46,18 @@ class LobbyScreen extends React.Component<LobbyScreenProps, LobbyScreenState> {
     this.removePlayerFromLobby()
   }
 
-  removePlayerFromLobby() {
+  removePlayerFromLobby = () => {
     Meteor.call('lobbies.leaveLobby')
     window.removeEventListener('beforeunload', this.removePlayerFromLobby)
   }
 
+  startGame = () => {
+    Meteor.call('lobbies.startGame')
+  }
+
   render() {
     const {
+      startGame,
       props: {
         classes,
       },
@@ -85,6 +93,7 @@ class LobbyScreen extends React.Component<LobbyScreenProps, LobbyScreenState> {
             <Button
               className={classes.startButton}
               disabled={!isHost}
+              onClick={startGame}
               variant="contained">
               Start Game
             </Button>

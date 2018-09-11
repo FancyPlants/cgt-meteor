@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { Accounts } from 'meteor/accounts-base'
 import Card from '../logic/card'
-import { generateID } from '../ui/utilities'
+import { generateID, MongoID } from '../ui/utilities'
 import includes from 'lodash/includes'
 
 interface UserOptions {
@@ -15,12 +15,6 @@ Accounts.onCreateUser((options: UserOptions, user: User) => {
     gamesWon: 0,
   }
 
-  user.currentGame = {
-    hand: [],
-    gameId: '',
-    tokens: 2,
-  }
-
   return user
 })
 
@@ -31,7 +25,7 @@ export interface User extends Meteor.User {
 
 interface CurrentGame {
   hand: Card[],
-  gameId: string,
+  gameId: MongoID,
   tokens: number,
 }
 
@@ -48,7 +42,6 @@ if (Meteor.isServer) {
     function users() {
       return Meteor.users.find({}, { fields: {
         username: 1,
-        currentGame: 1,
         profile: 1,
       }})
     },
