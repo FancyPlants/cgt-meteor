@@ -43,11 +43,8 @@ export enum GameState {
   // claim a duke to prevent the foreign aid. At that point, if someone claims
   // duke, the state turns to a normal BLUFF_CALL
   FOREIGN_AID = 'foreign_aid',
-}
 
-// stil unsure I'm going to use this, but I'm thinking that decision trees
-// need to have the edges defined as well, for transitioning the state of this machine
-export enum GameActions {
-  INCOME = 'income',
-
+  // after getting coup'd or assassinated or something, the user
+  // has the option of choosing either card to lose
+  LOSING_CARD = 'losing_card',
 }

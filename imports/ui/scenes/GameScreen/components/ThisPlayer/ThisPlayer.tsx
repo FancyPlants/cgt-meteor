@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Tracker } from 'meteor/tracker'
+import { Meteor } from 'meteor/meteor'
 import {
   withStyles,
   WithStyles,

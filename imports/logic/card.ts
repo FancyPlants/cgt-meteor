@@ -1,6 +1,6 @@
 import random from 'lodash/random'
 
-enum Card {
+export enum Card {
   Assassin = 'assassin',
   Captain = 'captain',
   Contessa = 'contessa',
@@ -20,5 +20,3 @@ export const newHand = () => [
   cards[random(0, cards.length - 1)],
   cards[random(0, cards.length - 1)],
 ]
-
-export default Card

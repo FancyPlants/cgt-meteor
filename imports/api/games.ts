@@ -5,7 +5,7 @@ import includes from 'lodash/includes'
 
 import { generateID, MongoID } from '../ui/utilities'
 import { User } from './users'
-import Card from '../logic/card'
+import { Card } from '../logic/card'
 import { GameState } from '../logic/game'
 
 export const Games = new Mongo.Collection<Game>('games')
@@ -32,6 +32,7 @@ if (Meteor.isServer) {
     },
   )
 
+  // prob gonna be long, as this is gonna encompass everything
   Meteor.methods({
     'games.leaveGame'() {
       Games.update({ currentPlayers: { $elemMatch: { userId: this.userId }} }, { $pull: {

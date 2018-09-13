@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core'
 
 import ThisPlayer from './components/ThisPlayer/ThisPlayer'
+import OtherPlayerList from './components/OtherPlayerList/OtherPlayerList'
 
 interface GameScreenProps extends WithStyles<typeof styles> {}
 
@@ -23,6 +24,7 @@ class GameScreen extends React.Component<GameScreenProps, {}> {
         <Typography variant="display2">Game Name</Typography>
         <hr />
         <ThisPlayer />
+        <OtherPlayerList />
       </React.Fragment>
     )
   }

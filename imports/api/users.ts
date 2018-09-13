@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import { Accounts } from 'meteor/accounts-base'
-import Card from '../logic/card'
+import { Card } from '../logic/card'
 import { generateID, MongoID } from '../ui/utilities'
 import includes from 'lodash/includes'
 

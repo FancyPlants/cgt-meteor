@@ -41,11 +41,30 @@ class OtherPlayerList extends React.Component<{}, OtherPlayerListState> {
       },
     } = this
 
+    if (!game) {
+      return null
+    }
+
     return (
       <div>
-        {users.map => {
+        {users.map(user => {
+          if (user._id === Meteor.userId()) {
+            return null
+          }
 
-        }}
+          const gameInfo = game.currentPlayers.find(data => data.userId === user._id)
+          if (!gameInfo) {
+            return null
+          }
+
+          return (
+            <OtherPlayer
+              tokens={gameInfo.tokens}
+              userId={user._id as string}
+              username={user.username as string}
+              />
+          )
+        })}
       </div>
     )
   }
